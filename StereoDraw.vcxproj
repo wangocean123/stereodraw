@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3E88E011-8AF2-486A-92E8-C275208B111B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GoodDraw</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v100</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;STEREPDRAW_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>..\gdal\gcore;..\gdal\ogr;..\gdal\port;.\;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;d3d9.lib;d3dx9.lib;Msimg32.lib;gdal_dhj_vc10_x86_MD.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;..\gdal\lib;..\$(Configuration)\</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;STEREPDRAW_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\gdal\gcore;..\gdal\ogr;..\gdal\port;.\;</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\;..\gdal\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glu32.lib;d3d9.lib;d3dx9.lib;Msimg32.lib;gdal_dhj_vc10_x86_MD.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\gdal\GDALDatasetEx.h" />
+    <ClInclude Include="BitmapFunc.h" />
+    <ClInclude Include="Curve.h" />
+    <ClInclude Include="c_editor.h" />
+    <ClInclude Include="c_command.h" />
+    <ClInclude Include="c_drawer.h" />
+    <ClInclude Include="c_drawer_d3d.h" />
+    <ClInclude Include="c_drawer_device.h" />
+    <ClInclude Include="c_drawer_gdi.h" />
+    <ClInclude Include="c_drawer_gl.h" />
+    <ClInclude Include="c_drawing_base.h" />
+    <ClInclude Include="c_drawing_layer.h" />
+    <ClInclude Include="c_font_helper.h" />
+    <ClInclude Include="c_geometry.h" />
+    <ClInclude Include="c_geo_db.h" />
+    <ClInclude Include="c_geo_line.h" />
+    <ClInclude Include="c_geo_map.h" />
+    <ClInclude Include="c_geo_point.h" />
+    <ClInclude Include="c_geo_polygon.h" />
+    <ClInclude Include="c_geo_text.h" />
+    <ClInclude Include="c_inner_command.h" />
+    <ClInclude Include="c_octree.h" />
+    <ClInclude Include="c_paint_board.h" />
+    <ClInclude Include="c_raster_layer.h" />
+    <ClInclude Include="c_selection.h" />
+    <ClInclude Include="c_texture_d3d.h" />
+    <ClInclude Include="c_texture_gdi.h" />
+    <ClInclude Include="c_texture_gl.h" />
+    <ClInclude Include="c_texture_obj.h" />
+    <ClInclude Include="c_variant.h" />
+    <ClInclude Include="c_vector_layer.h" />
+    <ClInclude Include="c_workspace.h" />
+    <ClInclude Include="readwrite_lock.h" />
+    <ClInclude Include="stereodraw.h" />
+    <ClInclude Include="StereoDrawBaseType.h" />
+    <ClInclude Include="StereoDrawHelperAPI.h" />
+    <ClInclude Include="vector_obj.h" />
+    <ClInclude Include="geo_algorithom.h" />
+    <ClInclude Include="matrix.h" />
+    <ClInclude Include="point_def.h" />
+    <ClInclude Include="rect_def.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="text_style.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\gdal\GDALDatasetEx.cpp" />
+    <ClCompile Include="BitmapFunc.cpp" />
+    <ClCompile Include="Curve.cpp" />
+    <ClCompile Include="c_editor.cpp" />
+    <ClCompile Include="c_command.cpp" />
+    <ClCompile Include="c_drawer.cpp" />
+    <ClCompile Include="c_drawer_d3d.cpp" />
+    <ClCompile Include="c_drawer_device.cpp" />
+    <ClCompile Include="c_drawer_gdi.cpp" />
+    <ClCompile Include="c_drawer_gl.cpp" />
+    <ClCompile Include="c_drawing_base.cpp" />
+    <ClCompile Include="c_drawing_layer.cpp" />
+    <ClCompile Include="c_font_helper.cpp" />
+    <ClCompile Include="c_geometry.cpp" />
+    <ClCompile Include="c_geo_db.cpp" />
+    <ClCompile Include="c_geo_line.cpp" />
+    <ClCompile Include="c_geo_map.cpp" />
+    <ClCompile Include="c_geo_point.cpp" />
+    <ClCompile Include="c_geo_polygon.cpp" />
+    <ClCompile Include="c_geo_text.cpp" />
+    <ClCompile Include="c_inner_command.cpp" />
+    <ClCompile Include="c_octree.cpp" />
+    <ClCompile Include="c_paint_board.cpp" />
+    <ClCompile Include="c_raster_layer.cpp" />
+    <ClCompile Include="c_selection.cpp" />
+    <ClCompile Include="c_texture_d3d.cpp" />
+    <ClCompile Include="c_texture_gdi.cpp" />
+    <ClCompile Include="c_texture_gl.cpp" />
+    <ClCompile Include="c_texture_obj.cpp" />
+    <ClCompile Include="c_variant.cpp" />
+    <ClCompile Include="c_vector_layer.cpp" />
+    <ClCompile Include="c_workspace.cpp" />
+    <ClCompile Include="dllmain.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="readwrite_lock.cpp" />
+    <ClCompile Include="StereoDraw.cpp" />
+    <ClCompile Include="StereoDrawHelperAPI.cpp" />
+    <ClCompile Include="vector_obj.cpp" />
+    <ClCompile Include="geo_algorithom.cpp" />
+    <ClCompile Include="matrix.cpp" />
+    <ClCompile Include="point_def.cpp" />
+    <ClCompile Include="rect_def.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="text_style.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
