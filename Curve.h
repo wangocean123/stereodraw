@@ -44,8 +44,8 @@ namespace Curve
 		/// <param name="d">Right side of the equation.</param>
 		bool Solve(double* d, double *r);
 
-		//Equation: a1*xn + b1*x1 + c1*x2 = d1; the last one is: cn*x1 + an*x[n-1] + bn*xn = dn;
-		/* coefficients matrix:
+		//闭合的时候，首行方程为a1*xn + b1*x1 + c1*x2 = d1; 尾行方程为cn*x1 + an*x[n-1] + bn*xn = dn;
+		/* 方程组的系数矩阵形式如下
 		b1  c1  ................................... a1   d1
 		a2  b2  c2 ...................................   d2
 		    a3  b3  c3 ...............................   d3
@@ -60,12 +60,12 @@ namespace Curve
 		bool Solve2(double* d, double *r);
 	};
 
-	class STEREODRAW_API CCubicSpline
+	class GOODDRAW_API CCubicSpline
 	{
 	private:
 		struct pt_3d_repeat
 		{
-			StereoDraw::geo_vertex pt;
+			gd::GeoVertex pt;
 			int repeat_index;
 		};
 	public:
@@ -73,7 +73,7 @@ namespace Curve
 		~CCubicSpline();
 
 		bool FitGeometric(double* x, double* y, int nInput, int nOutputPoints, bool bclosed, double* xs, double* ys);
-		bool FitGeometric(const StereoDraw::geo_vertex *pts, int nInput, double toler, bool bclosed, StereoDraw::vertex_array& ret_pts);
+		bool FitGeometric(const gd::GeoVertex *pts, int nInput, double toler, bool bclosed, gd::vertex_array& ret_pts);
 
 	private:
 		int GetNextXIndex(int last_knot_index, double x);
@@ -104,9 +104,9 @@ namespace Curve
 	};
 
 	
-	void STEREODRAW_API Arc(StereoDraw::geo_vertex pt1, StereoDraw::geo_vertex pt2, StereoDraw::geo_vertex pt3, double toler, StereoDraw::vertex_array& ret_pts);
+	void GOODDRAW_API Arc(gd::GeoVertex pt1, gd::GeoVertex pt2, gd::GeoVertex pt3, double toler, gd::vertex_array& ret_pts);
 
-	void STEREODRAW_API Curve(const StereoDraw::geo_vertex *pts, int nInput, double toler, bool bclosed, StereoDraw::vertex_array& ret_pts);
+	void GOODDRAW_API Curve(const gd::GeoVertex *pts, int nInput, double toler, bool bclosed, gd::vertex_array& ret_pts);
 
-	void STEREODRAW_API GetVertexIndex(const StereoDraw::vertex_array& ret_pts, std::vector<int>& indexs);
+	void GOODDRAW_API GetVertexIndex(const gd::vertex_array& ret_pts, std::vector<int>& indexs);
 }

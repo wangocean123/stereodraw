@@ -440,12 +440,12 @@ namespace Curve
 		return true;
 	}
 	
-	bool CCubicSpline::FitGeometric(const StereoDraw::geo_vertex *pts, int nInput, double toler, bool bclosed, StereoDraw::vertex_array& ret_pts)
+	bool CCubicSpline::FitGeometric(const gd::GeoVertex *pts, int nInput, double toler, bool bclosed, gd::vertex_array& ret_pts)
 	{
 		int nInput0 = nInput;
 
-		StereoDraw::geo_vertex *pts_new = new StereoDraw::geo_vertex[nInput];
-		auto_ptr<StereoDraw::geo_vertex> auto_p1(pts_new);
+		gd::GeoVertex *pts_new = new gd::GeoVertex[nInput];
+		auto_ptr<gd::GeoVertex> auto_p1(pts_new);
 
 		//kick off repeat knots
 		if (true)
@@ -604,15 +604,15 @@ namespace Curve
 		return true;
 	}
 
-	void Arc(StereoDraw::geo_vertex pt1, StereoDraw::geo_vertex pt2, StereoDraw::geo_vertex pt3, double toler, StereoDraw::vertex_array& ret_pts)
+	void Arc(gd::GeoVertex pt1, gd::GeoVertex pt2, gd::GeoVertex pt3, double toler, gd::vertex_array& ret_pts)
 	{
 		//计算圆心/半径，方法：通过两个线段的中垂线交点
-		StereoDraw::geo_vertex mpt1, mpt2;
+		gd::GeoVertex mpt1, mpt2;
 		mpt1 = geo_api::get_mid_2d(pt1, pt2);
 		mpt2 = geo_api::get_mid_2d(pt2, pt3);
 
-		StereoDraw::geo_vertex mline_pt1, mline_pt2, mline_pt3, mline_pt4, cpt;
-		geo_api::vector<StereoDraw::geo_vertex> v1(pt1, pt2), v2(pt2, pt3);
+		gd::GeoVertex mline_pt1, mline_pt2, mline_pt3, mline_pt4, cpt;
+		geo_api::vector<gd::GeoVertex> v1(pt1, pt2), v2(pt2, pt3);
 		
 		mline_pt1 = mline_pt2 = mpt1;
 		v1.rotate90();
@@ -683,7 +683,7 @@ namespace Curve
 		bool increased = (a > 0);
 		for (; increased ? (t < a2) : (t>a2); t += a)
 		{
-			StereoDraw::geo_vertex pt;
+			gd::GeoVertex pt;
 			pt.x = cpt.x + r*cos(t);
 			pt.y = cpt.y + r*sin(t);
 			pt.z = pt1.z + dz*(t - a1) / (a2 - a1);
@@ -694,7 +694,7 @@ namespace Curve
 		dz = pt3.z - pt2.z;
 		for (; increased ? (t < a3) : (t>a3); t += a)
 		{
-			StereoDraw::geo_vertex pt;
+			gd::GeoVertex pt;
 			pt.x = cpt.x + r*cos(t);
 			pt.y = cpt.y + r*sin(t);
 			pt.z = pt2.z + dz*(t - a2) / (a3 - a2);
@@ -703,7 +703,7 @@ namespace Curve
 		ret_pts.push_back(pt3);
 	}
 
-	void Curve(const StereoDraw::geo_vertex *pts, int nInput, double toler, bool bclosed, StereoDraw::vertex_array& ret_pts)
+	void Curve(const gd::GeoVertex *pts, int nInput, double toler, bool bclosed, gd::vertex_array& ret_pts)
 	{
 		if (nInput == 2)
 		{
@@ -724,7 +724,7 @@ namespace Curve
 
 				int code = pts[i - 1].pen_code;
 
-				if (code == StereoDraw::geo_vertex::code_arc_3p)
+				if (code == gd::GeoVertex::code_arc_3p)
 				{
 					int j = start;
 					for (; j < i;)
@@ -741,13 +741,13 @@ namespace Curve
 						}
 					}					
 				}
-				else if (code == StereoDraw::geo_vertex::code_spline)
+				else if (code == gd::GeoVertex::code_spline)
 				{
 					int j = start;
 					if ((i - j)>2)
 					{
 						CCubicSpline spline;
-						StereoDraw::vertex_array pts2;
+						gd::vertex_array pts2;
 						bool bclosed = false;
 
 						if (i == (nInput - 1) && j == 0 && geo_api::is_equal_point(pts[i], pts[j]))
@@ -766,7 +766,7 @@ namespace Curve
 				}
 				else
 				{
-					for (int j=start; j<i; i++)
+					for (int j=start; j<i; j++)
 					{
 						ret_pts.push_back(pts[j]);
 					}
@@ -777,12 +777,12 @@ namespace Curve
 		}
 	}
 
-	void GetVertexIndex(const StereoDraw::vertex_array& ret_pts, std::vector<int>& indexs)
+	void GetVertexIndex(const gd::vertex_array& ret_pts, std::vector<int>& indexs)
 	{
 		int size = ret_pts.size();
 		for (int i = 0; i < size; i++)
 		{
-			if (ret_pts[i].pen_code != StereoDraw::geo_vertex::code_none)
+			if (ret_pts[i].pen_code != gd::GeoVertex::code_none)
 			{
 				indexs.push_back(i);
 			}
