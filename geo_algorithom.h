@@ -1,7 +1,7 @@
 #pragma once
 
 #include "math.h"
-#include "StereoDraw.h"
+#include "GoodDraw.h"
 #include "rect_def.h"
 #include "matrix.h"
 #include <vector>
@@ -10,11 +10,11 @@ namespace geo_api
 {
 	const double PI = 3.14159265358979324;
 
-	double STEREODRAW_API get_toler_xy();
-	void STEREODRAW_API set_toler_xy(double toler);
+	double GOODDRAW_API get_toler_xy();
+	void GOODDRAW_API set_toler_xy(double toler);
 
-	double STEREODRAW_API get_toler_z();
-	void STEREODRAW_API set_toler_z(double toler);
+	double GOODDRAW_API get_toler_z();
+	void GOODDRAW_API set_toler_z(double toler);
 
 	template<class type>
 	inline type gf_abs(type a)
@@ -154,6 +154,8 @@ namespace geo_api
 	}
 
 	/* 
+	判断点与线段的关系（垂足在线段上的比例点，0,起点，1，终点，<0，起点前，>0终点后，0～1,内部）,
+	本函数是根据下面的公式写的，P是点C到线段AB所在直线的垂足
 
 			AC dot AB
 	r =     ---------
@@ -203,6 +205,9 @@ namespace geo_api
 	}
 
 	/* 
+	返回原点在o点，起始边为os，终止边为oe的夹角(单位：弧度)
+	可以用于求线段之间的夹角(0~pi)
+	原理：
 	r = dotmultiply(s,e,o) / (dist(o,s)*dist(o,e))
 	r'= multiply(s,e,o)
 	r >= 1	angle = 0;
@@ -276,6 +281,7 @@ namespace geo_api
 		}
 
 		if(dy < 0)ang += PI;
+		return ang;
 	}
 
 	template<class point_type>
@@ -332,7 +338,7 @@ namespace geo_api
 		for (int i = 0; i<npt - 1; i++)
 		{
 			dis = get_dis_pt_to_lineseg(pts[i], pts[i + 1], pt_test);
-			if (min_dex<0 || min_dis>dis)
+			if (min_index<0 || min_dis>dis)
 			{
 				min_dis = dis;
 				min_index = i;
@@ -502,9 +508,16 @@ namespace geo_api
 	{
 		double toler = get_toler_xy();
 
+		//采用水平向右的射线进行相交判断
 		int cross_count = 0;
 
 		/*
+		注意到如果从P作水平向左的射线的话，如果P在多边形内部，那么这条射线与多边形的交点必为奇数，如果P在多边形外部，则交点个数必为偶数（0也在内）。
+		所以，我们可以顺序考虑多边形的每条边，求出交点的总个数。还有一些特殊情况要考虑。假如考虑边(P1,P2)，
+		1)如果射线正好穿过P1或者P2,那么这个交点会被算作2次，处理办法是如果P的从坐标与P1,P2中较小的纵坐标相同，则直接忽略这种情况
+		2)如果射线水平，则射线要么与其无交点，要么有无数个，这种情况也直接忽略。
+		3)如果射线竖直，而P0的横坐标小于P1,P2的横坐标，则必然相交。
+		4)再判断相交之前，先判断P是否在边(P1,P2)的上面，如果在，则直接得出结论：P在多边形内部。
 		*/		
 		for (int i = 0; i < npt; i++)
 		{
@@ -513,12 +526,14 @@ namespace geo_api
 			y0 = min(pts[i].y, pts[j].y);
 			y1 = max(pts[i].y, pts[j].y);
 
+			//完全落在边界线段外
 			if (pt.y<y0 - toler || pt.y>y1 + toler)
 				continue;
 
 			if (pt.x>pts[i].x + toler && pt.x > pts[j].x + toler)
 				continue;
 
+			//刚好落在边界线段上
 			if (!(pt.x < pts[i].x - toler && pt.x < pts[j].x - toler))
 			{
 				if (is_pt_on_lineseg(pt, pts[i], pts[j]))
@@ -526,15 +541,19 @@ namespace geo_api
 					return 0;
 				}
 			}			
+			
+			//射线穿过一个顶点，忽略y值较小的那个点，这样交点的计算就只会有一次
 			if (gf_abs(pt.y - y0) < toler && gf_abs(pt.y - y1) >= toler )
 				continue;
 			else if (gf_abs(pt.y - y1) < toler && gf_abs(pt.y - y0) >= toler)
 			{ 
 				cross_count++;
 			}
+			//射线穿过两个顶点(水平线段)
 			else if (gf_abs(y1 - y0) < toler)
 			{
 			}
+			//当gf_abs(pt.y - y0) < toler && gf_abs(pt.y - y1) < toler且又不落在边界线段上时，与一般相交等同处理 
 			else
 			{
 				double x = pts[i].x + (pts[j].x - pts[i].x) * (pt.y - pts[i].y) / (pts[j].y - pts[i].y);
@@ -629,6 +648,11 @@ namespace geo_api
 		return tp;
 	}
 
+	/******************************************************************************
+	用 途	：求不共线的三点确定一个圆
+	输 入	：三个点p1,p2,p3
+	返回值	：如果三点共线，返回false；反之，返回true。圆心由q返回，半径由r返回
+	*******************************************************************************/
 	template<class point_type>
 	bool get_circle(point_type p1, point_type p2, point_type p3, point_type &center, double &r)
 	{
@@ -853,13 +877,13 @@ namespace geo_api
 	};
 
 
-	StereoDraw::rect_3d transform_rect3d(const StereoDraw::rect_3d& rect, const StereoDraw::matrix4d& m);
+	gd::Rect3D transform_rect3d(const gd::Rect3D& rect, const gd::matrix4d& m);
 
 	template<class point_type>
-	point_type transform_point3d(const point_type& pt, const StereoDraw::matrix4d& m)
+	point_type transform_point3d(const point_type& pt, const gd::matrix4d& m)
 	{
 		point_type pt2 = pt;
-		StereoDraw::transform_pts_by_matrix_3d(&pt2, 1, m);
+		gd::transform_pts_by_matrix_3d(&pt2, 1, m);
 		return pt2;
 	}
 }
